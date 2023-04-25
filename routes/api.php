@@ -23,4 +23,5 @@ Route::prefix('assets')->group(function () {
     Route::post('/register', [AssetController::class, 'register']);
     Route::patch('/update/{id}', [AssetController::class, 'edit']);
     Route::get('/{id}', [AssetController::class, 'detail']);
+    Route::delete('/delete/{id}', [AssetController::class, 'delete']);
 });

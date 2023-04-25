@@ -19,27 +19,27 @@ class AssetController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => ['required'],
-            'organization_id' => ['required'],
-            'sensor_id' => ['required'],
-            'pic'=> ['required'],
-            'description' => ['required']
+        $validatedData = $request->validate([
+            'name' => ['string'],
+            'organization_id' => ['integer'],
+            'sensor_id' => ['integer'],
+            'pic'=> ['integer'],
+            'description' => ['string']
         ]);
 
         try {
-            $data = new Asset;
-            $data->name = $request->input('name');
-            $data->organization_id = $request->input('organization_id');
-            $data->sensor_id = $request->input('sensor_id');
-            $data->pic_id = $request->input('pic');
-            $data->description = $request->input('description');
-            $data->save();
+            $asset = Asset::create([
+                'name' => $validatedData['name'],
+                'organization_id' => $validatedData['organization_id'],
+                'sensor_id' => $validatedData['sensor_id'],
+                'pic_id' => $validatedData['pic'],
+                'description' => $validatedData['description']
+            ]);
 
             return response()->json([
                 'code ' => 201,
                 'message' => 'registered',
-                'data' => $data
+                'data' => $asset
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -52,27 +52,47 @@ class AssetController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $request->validate([
-            'name' => ['required'],
-            'organization_id' => ['required'],
-            'sensor_id' => ['required'],
-            'pic'=> ['required'],
-            'description' => ['required']
+        $validatedData = $request->validate([
+            'name' => ['string'],
+            'organization_id' => ['integer'],
+            'sensor_id' => ['integer'],
+            'pic'=> ['integer'],
+            'description' => ['string']
         ]);
 
         try {
-            $data = Asset::findOrFail($id);
-            $data->name = $request->input('name');
-            $data->organization_id = $request->input('organization_id');
-            $data->sensor_id = $request->input('sensor_id');
-            $data->pic_id = $request->input('pic');
-            $data->description = $request->input('description');
-            $data->save();
+            $asset = Asset::findOrFail($id);
+            $asset->upadate([
+                'name' => $validatedData['name'] ?? $asset->name,
+                'organization_id' => $validatedData['organization_id'] ?? $asset->organization_id,
+                'sensor_id' => $validatedData['sensor_id'] ?? $asset->sensor_id,
+                'pic_id' => $validatedData['pic'] ?? $asset->pic_id,
+                'description' => $validatedData['description'] ?? $asset->description
+            ]);
 
             return response()->json([
                 'code ' => 201,
                 'message' => 'updated',
-                'data' => $data
+                'data' => $asset
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'error',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $asset = Asset::findOrFail($id);
+            $asset->delete();
+
+            return response()->json([
+                'code ' => 201,
+                'message' => 'deleted',
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
