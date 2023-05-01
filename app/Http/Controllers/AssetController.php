@@ -56,17 +56,17 @@ class AssetController extends Controller
             'name' => ['string'],
             'organization_id' => ['integer'],
             'sensor_id' => ['integer'],
-            'pic'=> ['integer'],
+            'pic_id'=> ['integer'],
             'description' => ['string']
         ]);
 
         try {
             $asset = Asset::findOrFail($id);
-            $asset->upadate([
+            $asset->update([
                 'name' => $validatedData['name'] ?? $asset->name,
                 'organization_id' => $validatedData['organization_id'] ?? $asset->organization_id,
                 'sensor_id' => $validatedData['sensor_id'] ?? $asset->sensor_id,
-                'pic_id' => $validatedData['pic'] ?? $asset->pic_id,
+                'pic_id' => $validatedData['pic_id'] ?? $asset->pic_id,
                 'description' => $validatedData['description'] ?? $asset->description
             ]);
 
