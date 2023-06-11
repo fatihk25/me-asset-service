@@ -11,6 +11,9 @@ class Asset extends Model
 
     protected $fillable = [
         'name',
+        'location',
+        'as_number',
+        'dns',
         'organization_id',
         'sensor_id',
         'pic_id',
